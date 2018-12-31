@@ -1,0 +1,36 @@
+net
+eth.blockNumber
+miner.start()
+eth.blockNumber
+eth.accounts
+acc = eth.accounts
+acc = acc[0]
+eth.getBalance(acc)
+eth.blockNumber
+eth.accounts
+acc1 = eth.accounts[1]
+acc0 = eth.accounts[0]
+eth.sendTransaction({from: acc0, to: acc1, value: web3.toWei("1 ether")})
+eth.sendTransaction({from: acc0, to: acc1, value: web3.toWei("1", "ether")})
+eth.blockNumber
+web3.version
+eth.accounts
+eth.net
+eth.network
+net
+web3
+web3.version.network
+exit()
+eth.accoutns
+eth.accounts
+manager = eth.accounts[0]
+user1 = eth.accounts[1]
+user2 = eth.accounts[0]
+user2 = eth.accounts[2]
+user3 = eth.accounts[3]
+user4 = eth.accounts[4]
+eth.sendTransaction({from: manager, to: user2, value: web3.toWei(10)})
+eth.getBalance(user1)
+eth.getBalance(user2)
+eth.sendTransaction({from: manager, to: user3, value: web3.toWei(10)})
+eth.sendTransaction({from: manager, to: user4, value: web3.toWei(10)})

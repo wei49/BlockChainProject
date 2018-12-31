@@ -1,0 +1,119 @@
+pragma solidity ^0.4.24;
+
+contract Probcontract {
+    struct User {
+      string username;
+      uint rank;
+    }
+
+    struct Comment {
+        string comment;
+        address commenter;
+    }
+
+    struct Answer {
+        string answer;
+        address answerer;
+        uint answerId;
+    }
+
+    struct Question {
+        string question;
+        address asker;
+        uint value;
+        bool isEnd;
+        uint questionId;
+    }
+
+    mapping(address => User) public users;
+    Question[] public questions;
+    mapping(uint => Answer[]) public answers; 
+    mapping(uint => Comment[]) public comments; 
+
+    event QuestionEnd(uint quesid, uint ansid);
+    event AddAnswer(uint quesid);
+    event AddComment(uint quesid, uint ansid);
+
+    function getRank(address addr) public view returns(uint) {
+        return users[addr].rank;
+    }
+    
+    function setUsername(string memory _username) public {
+        users[msg.sender].username = _username;
+    }
+
+    function getUsername(address addr) public view returns(string memory) {
+        return users[addr].username;
+    }
+
+    function putQuestion(string memory _question) public payable returns(uint) {
+        questions.push(Question(_question, msg.sender, msg.value, false, questions.length));
+        return questions.length-1;
+    }
+
+    function answerQuestion(uint _id, string memory _answer) public returns(uint) {
+        require(_id < questions.length, "问题id超过数组范围");
+        Answer[] storage ans = answers[questions[_id].questionId];
+        ans.push(Answer(_answer, msg.sender, ans.length));
+
+        emit AddAnswer(_id);
+        return ans.length-1;
+    }
+
+    function addComment(uint _quesid, uint _ansid, string memory _comment) public returns(uint) {
+        require(_quesid < questions.length, "问题id超过数组范围");
+        Question memory q = questions[_quesid];
+        require(_ansid < answers[q.questionId].length, "回答id超过数组范围");
+        Answer memory a = answers[q.questionId][_ansid];
+        Comment[] storage comm = comments[a.answerId];
+        comm.push(Comment(_comment, msg.sender));
+
+        emit AddComment(_quesid, _ansid);
+        return comm.length-1;
+    }
+
+    function getQuestionLength() public view returns (uint) {
+        return questions.length;
+    }
+
+    function getQuestion(uint _id) public view returns(string memory, address, uint, uint, bool) {
+        require(_id < questions.length, "问题不存在");
+        Question memory q = questions[_id];
+
+        return (q.question, q.asker, q.value, answers[q.questionId].length, q.isEnd);
+    }
+
+    function getAnswer(uint _quesid, uint _ansid) public view returns(string memory, address, uint) {
+        require(_quesid < questions.length, "问题不存在");
+        Question memory q = questions[_quesid];
+        require(_ansid < answers[q.questionId].length, "回答不存在");
+        Answer memory a = answers[q.questionId][_ansid];
+
+        return (a.answer, a.answerer, comments[a.answerId].length);
+    }
+
+    function getComment(uint _quesid, uint _ansid, uint _commid) public view returns(string memory, address) {
+        require(_quesid < questions.length, "问题不存在");
+        Question memory q = questions[_quesid];
+        require(_ansid < answers[q.questionId].length, "回答不存在");
+        Answer memory a = answers[q.questionId][_ansid];
+        require(_commid < comments[a.answerId].length, "评论不存在");
+        Comment memory c = comments[a.answerId][_commid];
+
+        return (c.comment, c.commenter);
+    }
+
+    function questionEnd(uint _quesid, uint _ansid) public {
+        require(_quesid < questions.length, "问题不存在");
+        Question storage q = questions[_quesid];
+        require(_ansid < answers[q.questionId].length, "回答不存在");
+        Answer memory a = answers[q.questionId][_ansid];
+        require(msg.sender == q.asker, "只有提出问题的人才能结束问题");
+        require(!q.isEnd, "问题已结束");
+
+        q.isEnd = true;
+        users[a.answerer].rank += 1;
+        emit QuestionEnd(_quesid, _ansid);
+        a.answerer.transfer(q.value);
+    }
+}

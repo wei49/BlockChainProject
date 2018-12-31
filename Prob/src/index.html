@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DApp Prob</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <div class="header">
+        <div class="topbar-icon">header</div>
+    </div>
+    <div class="subheader">
+        <h1>Questions</h1>
+    </div>
+    <div class="container">
+        <!-- <div class="mainbar">
+            <div class="summary ">
+                <div class="cp">
+                    <div class="statue question-value">
+                        <div>000</div>
+                        <div>Wei</div>
+                    </div>
+                    <div class="statue answer-accept">
+                        <div>1</div>
+                        <div>answers</div>
+                    </div>
+                </div>
+                <div class="details">
+                    <h2><a>
+                        question
+                    </a></h2>
+                    <div class="meta">
+                        <div class="author">Ben Voigt</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answers">
+                <div class="answer">
+                    <input class= "setBestAns" type="button" value="设为最佳答案">
+                    <div class="answerContent">answer</div>
+                    <div class="answerer">user2</div>
+                </div>
+            </div>
+            
+            <textarea style="width: 50%; height: 100px; margin: 50px auto; font-size: 20px; display: block"></textarea>
+            <input type="button" value="提交" style="display: block; margin: 10px auto">
+
+        </div> -->
+    </div>
+    <footer class="footer" style = "text-align:center">
+        <div style="font-size: 20px; margin-top: 50px; margin-bottom: 10px; font-weight: bold" >提交问题</div>
+        <textarea id="question" style="width: 70%; height: 180px; font-size: 20px;"></textarea>
+        <input id = "value" type="text" value="ETH" style="display: block; margin: 10px auto">
+        <input type="button" value="提交" style="display: block; margin: 10px auto" onclick="Interface.askQuestion()">
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="js/web3.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/interface.js"></script>
+	<script src="js/truffle-contract.min.js"></script>
+
+</body>
+</html>
